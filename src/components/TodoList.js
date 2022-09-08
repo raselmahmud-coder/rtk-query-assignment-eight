@@ -2,8 +2,7 @@ import { useFetchTodosQuery } from "../features/API/APISlice";
 import Todo from "./Todo";
 
 export default function TodoList() {
-  const { data: Todos, isError, isLoading } = useFetchTodosQuery();
-  console.log(Todos);
+  const { data: Todos, isError, isLoading,isFetching} = useFetchTodosQuery();
 
   /*   const filterByStatus = (todo) => {
     const { status } = filters;
@@ -31,7 +30,7 @@ export default function TodoList() {
 
   // decide what to render
   let content = null;
-  if (isLoading) {
+  if (isLoading || isFetching) {
     content = <div className="loader text-xl text-blue-300">Loading...</div>;
   } else if (isError) {
     content = <div className="text-2x text-red-500">Something went wrong</div>;

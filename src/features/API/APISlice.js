@@ -4,13 +4,50 @@ export const APISlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "https://lws-fake-product-api-json-server.onrender.com",
   }),
-    tagTypes: ["todos"],
-    endpoints: (builder) => ({
-        fetchTodos: builder.query({
-            query: () => "/todos",
-            providesTags: ["todos"],
-        }),
+  tagTypes: ["todos"],
+  endpoints: (builder) => ({
+    fetchTodos: builder.query({
+      query: () => "/todos",
+      providesTags: ["todos"],
     }),
+    createTodo: builder.mutation({
+      query: (data) => ({
+        url: "/todos",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["todos"],
+    }),
+    updateTodo: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/todos/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["todos"],
+    }),
+    deleteTodo: builder.mutation({
+      query: (id) => ({
+        url: `/todos/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["todos"],
+    }),
+    allTaskCompleted: builder.mutation({
+      query: () => ({
+        url: `/todos`,
+        method: "PATCH",
+        body: { completed: true },
+      }),
+      invalidatesTags: ["todos"],
+    }),
+  }),
 });
 
-export const {useFetchTodosQuery} = APISlice;
+export const {
+  useFetchTodosQuery,
+  useCreateTodoMutation,
+  useUpdateTodoMutation,
+  useDeleteTodoMutation,
+  useAllTaskCompletedMutation,
+} = APISlice;
