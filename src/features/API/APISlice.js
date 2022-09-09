@@ -45,10 +45,18 @@ export const APISlice = createApi({
       invalidatesTags: ["todos"],
     }),
     allTaskCompleted: builder.mutation({
-      query: () => ({
-        url: `/todos`,
+      query: (id) => ({
+        url: `/todos/${id}`,
         method: "PATCH",
         body: { completed: true },
+      }),
+
+      invalidatesTags: ["todos"],
+    }),
+    clearCompleted: builder.mutation({
+      query: (id) => ({
+        url: `/todos/${id}`,
+        method: "DELETE",
       }),
       invalidatesTags: ["todos"],
     }),
@@ -61,4 +69,5 @@ export const {
   useUpdateTodoMutation,
   useDeleteTodoMutation,
   useAllTaskCompletedMutation,
+  useClearCompletedMutation,
 } = APISlice;

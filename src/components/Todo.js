@@ -3,7 +3,6 @@ import pen from "../assets/images/pen.png";
 import { useState } from "react";
 import {
   useDeleteTodoMutation,
-  useFetchTodosQuery,
   useUpdateTodoMutation,
 } from "../features/API/APISlice";
 import Spinner from "../Utils/Loader/Spinner";

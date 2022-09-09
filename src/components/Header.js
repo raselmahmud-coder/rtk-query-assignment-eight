@@ -5,6 +5,8 @@ import plusImage from "../assets/images/plus.png";
 import {
   useCreateTodoMutation,
   useAllTaskCompletedMutation,
+  useFetchTodosQuery,
+  useClearCompletedMutation,
 } from "../features/API/APISlice";
 
 export default function Header() {
@@ -14,6 +16,9 @@ export default function Header() {
     allTaskCompleted,
     { isLoading: isUpdateLoading, isError: isUpdateError },
   ] = useAllTaskCompletedMutation();
+  const [clearCompleted, { isLoading: isDeleteLoading }] =
+    useClearCompletedMutation();
+  const { data: Todos } = useFetchTodosQuery();
 
   const handleInput = (e) => {
     setInput(e.target.value);
@@ -30,10 +35,22 @@ export default function Header() {
   };
 
   const completeHandler = () => {
-    allTaskCompleted();
+    if (Todos?.length) {
+      for (const todo of Todos) {
+        allTaskCompleted(todo.id);
+      }
+    }
   };
 
-  const clearHeandler = () => {};
+  const clearCompletedHandler = () => {
+    if (Todos?.length) {
+      for (const todo of Todos) {
+        if (todo.completed) {
+          clearCompleted(todo.id);
+        }
+      }
+    }
+  };
 
   return (
     <div>
@@ -66,12 +83,14 @@ export default function Header() {
           <img className="w-4 h-4" src={tickImage} alt="Complete" />
           <span>Complete All Tasks</span>
         </li>
-        <li className="cursor-pointer" onClick={clearHeandler}>
+        <li className="cursor-pointer" onClick={clearCompletedHandler}>
           Clear completed
         </li>
       </ul>
-      {isUpdateLoading && (
+      {isUpdateLoading || isDeleteLoading ? (
         <div className="text-green-500 text-xs">Loading...</div>
+      ) : (
+        ""
       )}
       {isUpdateError && (
         <div className="text-red-500 text-xs">
