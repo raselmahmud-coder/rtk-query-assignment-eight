@@ -2,23 +2,25 @@ const { createApi, fetchBaseQuery } = require("@reduxjs/toolkit/query/react");
 export const APISlice = createApi({
   reducerPath: "API",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://lws-fake-product-api-json-server.onrender.com",
+    baseUrl:
+      "https://lws-fake-product-api-json-server-production.up.railway.app",
   }),
   tagTypes: ["todos"],
   endpoints: (builder) => ({
     fetchTodos: builder.query({
       query: (params) => {
         const { completed, color } = params || {};
-        let queryString = "";
+        let queryCompleted = "";
         if (completed === "true" || completed === "false") {
-          queryString += `completed=${completed}`;
+          queryCompleted = `completed=${completed}`;
         }
+        let queryColor = "";
         if (color) {
-          queryString += `&color=${color}`;
+          queryColor = `&color=${color}`;
         }
-        return `todos?${queryString}`;
+        return `todos?${queryCompleted}${queryColor}`;
       },
-      providesTags: () => ["todos"],
+      providesTags: ["todos"],
     }),
 
     createTodo: builder.mutation({

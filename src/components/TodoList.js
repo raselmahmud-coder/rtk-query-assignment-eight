@@ -10,7 +10,9 @@ export default function TodoList() {
     isError,
     isLoading,
     isFetching,
-  } = useFetchTodosQuery(params);
+  } = useFetchTodosQuery(params, {
+    refetchOnMountOrArgChange: true,
+  });
 
   // decide what to render
   let content = null;
