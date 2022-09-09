@@ -1,4 +1,10 @@
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useFetchTodosQuery } from "../features/API/APISlice";
+import {
+  colorChange,
+  statusChange,
+} from "../features/filters/statusFilterSlice";
 
 const numberOfTodos = (no_of_todos) => {
   switch (no_of_todos) {
@@ -12,19 +18,50 @@ const numberOfTodos = (no_of_todos) => {
 };
 
 export default function Footer() {
+  const dispatch = useDispatch();
   const { data: Todos, isError, isLoading } = useFetchTodosQuery();
+  const [status, setStatus] = useState("All");
+  const [colors, setColors] = useState([]);
 
-  const status = "All";
-  const colors = [];
+  const handleStatusChange = (status) => {
+    if (status === "Complete") {
+      setStatus("Complete");
+      dispatch(statusChange("true"));
+    }
+    if (status === "Incomplete") {
+      setStatus("Incomplete");
+      dispatch(statusChange("false"));
+    }
+    if (status === "All") {
+      setStatus("All");
+      dispatch(statusChange(""));
+    }
+  };
+  const handleColorChange = (color) => {
+    if (colors.includes(color)) {
+      setColors([]);
+      dispatch(colorChange(""));
+    } else {
+      if (color === "red") {
+        setColors(["red"]);
+        dispatch(colorChange("red"));
+      }
+      if (color === "green") {
+        setColors(["green"]);
+        dispatch(colorChange("green"));
+      }
+      if (color === "yellow") {
+        setColors(["yellow"]);
+        dispatch(colorChange("yellow"));
+      }
+    }
+  };
 
-  const handleStatusChange = (status) => {};
-
-  const handleColorChange = (color) => {};
   const todosRemaining = Todos?.filter((todo) => !todo.completed).length;
   return (
     <div className="mt-4 flex justify-between text-xs text-gray-500">
       <p>
-         {isLoading ? "Loading..." : `${numberOfTodos(todosRemaining)} left`}
+        {isLoading ? "Loading..." : `${numberOfTodos(todosRemaining)} left`}
       </p>
       <ul className="flex space-x-1 items-center text-xs">
         <li

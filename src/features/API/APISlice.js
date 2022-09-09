@@ -7,9 +7,20 @@ export const APISlice = createApi({
   tagTypes: ["todos"],
   endpoints: (builder) => ({
     fetchTodos: builder.query({
-      query: () => "/todos",
-      providesTags: ["todos"],
+      query: (params) => {
+        const { completed, color } = params || {};
+        let queryString = "";
+        if (completed === "true" || completed === "false") {
+          queryString += `completed=${completed}`;
+        }
+        if (color) {
+          queryString += `&color=${color}`;
+        }
+        return `todos?${queryString}`;
+      },
+      providesTags: () => ["todos"],
     }),
+
     createTodo: builder.mutation({
       query: (data) => ({
         url: "/todos",

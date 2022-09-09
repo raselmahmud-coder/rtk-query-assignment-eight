@@ -17,7 +17,7 @@ export default function Todo({ todo }) {
     useUpdateTodoMutation();
   const [deleteTodo, { isLoading: deleteLoading, isError: isDeleteError }] =
     useDeleteTodoMutation();
-  const { data: Todos } = useFetchTodosQuery();
+  // const { data: Todos } = useFetchTodosQuery();
 
   const handleStatusChange = async () => {
     setEventFire("update");
@@ -29,18 +29,11 @@ export default function Todo({ todo }) {
 
   const handleColorChange = async (selectedColor) => {
     setEventFire("color");
-    const findTodo = await Todos.find((todo) => +todo.id === +id);
-    if (!findTodo.color) {
-      await updateTodo({
-        id,
-        data: { color: selectedColor },
-      });
-    } else {
-      await updateTodo({
-        id,
-        data: { color: selectedColor },
-      });
-    }
+    await updateTodo({
+      id,
+      data: { color: selectedColor },
+    });
+ 
   };
 
   const handleDelete = () => {

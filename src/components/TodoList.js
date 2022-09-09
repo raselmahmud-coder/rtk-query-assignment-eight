@@ -1,32 +1,16 @@
+import { useSelector } from "react-redux";
 import { useFetchTodosQuery } from "../features/API/APISlice";
 import Todo from "./Todo";
 
 export default function TodoList() {
-  const { data: Todos, isError, isLoading,isFetching} = useFetchTodosQuery();
-
-  /*   const filterByStatus = (todo) => {
-    const { status } = filters;
-    switch (status) {
-      case "Complete":
-        return todo.completed;
-
-      case "Incomplete":
-        return !todo.completed;
-
-      default:
-        return true;
-    }
-  };
-  const filterByInCompleteTask = (todo) => {
-    return !todo.completed;
-  };
-  const filterByColors = (todo) => {
-    const { colors } = filters;
-    if (colors.length > 0) {
-      return colors.includes(todo?.color);
-    }
-    return true;
-  }; */
+  const { completed, color } = useSelector((state) => state.statusFilter);
+  const params = { completed, color };
+  const {
+    data: Todos,
+    isError,
+    isLoading,
+    isFetching,
+  } = useFetchTodosQuery(params);
 
   // decide what to render
   let content = null;
